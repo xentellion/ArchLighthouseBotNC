@@ -728,7 +728,7 @@ def main():
                 "[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]")
 
 
-            if user in ("000000-000000-000000", 'Маги'):
+            if user in ("000000-000000-000000", "Маги", "Штиль", "590182-630012-995152"):
                 channel = client.get_channel(1139663185696280656)
             elif user in ("дарк", "дарки"):
                 channel = client.get_channel(1135590381430522007)
@@ -1499,7 +1499,7 @@ def main():
                         panel_message = f"""```ml\nСообщение повреждено. Код ошибки: {random.randint(1000, 9999)}```"""
 
                 elif (panel_mess_rnd >= 101) and (panel_mess_rnd <= 200):
-                    panel_ad_type_list = ['мероприятие корпорации', 'реклама корпорации',
+                    panel_ad_type_list = ['мероприятие корпорации', 'реклама корпорации', 'покупка', 'продажа', 'услуга',
                                           'трудоустройство корпорации']
                     panel_ad_type = random.choice(panel_ad_type_list)
                     ft_time = random.choice(
@@ -1604,8 +1604,28 @@ def main():
                                     corp_emp = f"""```ml\n◈ 'ОБЪЯВЛЕНИЕ КОРПОРАЦИИ'\n▶ Мордекорп ◀\n""" \
                                                f"""{random.choice(data['ad_morde'])}\nПодробности: MordeS-{random.randint(1000, 9999)}```"""
                         panel_message = corp_emp
+
+                    elif panel_ad_type == 'покупка':
+                        if halfer == 1:
+                            panel_message = f"""```ml\nAD {random.choice(ad['how']).capitalize()} {random.choice(ad['pers_action_purch'])} """ \
+                                            f"""{random.choice(ad['what_is_ad'])}: {number_id()}```"""
+                        elif halfer == 2:
+                            panel_message = f"""```ml\nAD Скупка {random.choice(ad['not_obj'])}: {number_id()}```"""
+
+                    elif panel_ad_type == 'продажа':
+                        if halfer == 1:
+                            panel_message = f"""```ml\nAD {random.choice(ad['how']).capitalize()} {random.choice(ad['pers_action_sale'])} """ \
+                                            f"""{random.choice(ad['what_is_ad'])}, {price}: {number_id()}```"""
+                        elif halfer == 2:
+                            panel_message = f"""```ml\nAD Продажа {random.choice(ad['not_obj'])}: {number_id()}```"""
+
+                    elif panel_ad_type == 'услуга':
+                        panel_message = f"""```ml\nAD {random.choice(ad['service']).capitalize()}: {number_id()}```"""
+
                     else:
                         panel_message = f"""```ml\nСообщение повреждено. Код ошибки: {random.randint(1000, 9999)}```"""
+
+
 
                 elif panel_mess_rnd >= 205:
                     spam_def = random.randint(1, 100)
@@ -2073,6 +2093,14 @@ def main():
                 rnd_news = random.randint(1, 10)
                 if rnd_news > 8:
                     response = f"""```ml\nNEWS На осколке #{random.choice(quest['place'])} {random.choice(data['news_isl'])}```"""
+                elif rnd_news < 2:
+                    corp_corp_fest = random.choice(data['corporation'])
+                    ft_time = random.choice(['Сегодня', 'Завтра', 'Через 2 дня', 'Через 3 дня', 'Через 4 дня', 'Через 5 дней'])
+                    adress = random.randint(1000000000, 9999999999)
+                    response = f"""```ml\n◈ 'ОБЪЯВЛЕНИЕ КОРПОРАЦИИ'\n{ft_time.capitalize()} на осколке {random.choice(quest['place'])} """ \
+                                f"""{random.choice(ad['fest_action'])} {random.choice(ad['fest_type_corp'])} """ \
+                                f"""▶ {(corp_corp_fest).upper()} ◀. {random.choice(ad['fest_what_do']).capitalize()}! """ \
+                                f"""Узнать больше информации: {adress}```"""
                 else:
                     response = f"""```ml\nNEWS На осколке #{random.choice(quest['place'])} {random.choice(data['news_isl_corp'])} {random.choice(data['corporation'])}.```"""
                 await ctx.send(response)
