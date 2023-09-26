@@ -3,49 +3,14 @@ from discord.ext import commands
 import random
 import yaml
 import re
-from discord.utils import get
+import asyncio
+from src.client import ArchLight
+
 
 discord.utils.setup_logging()
 
-def main():
-
-        intents = discord.Intents.default()
-        intents.message_content = True
-        with open('token.yaml', 'r', encoding="utf8") as file:
-            TOKEN = yaml.safe_load(file)
-
-        client = commands.Bot(command_prefix='%', intents=intents)
-
-        data = None
-        with open('data.yaml', 'r', encoding="utf8") as file:
-            data = yaml.safe_load(file)
-
-        npc = None
-        with open('npc.yaml', 'r', encoding="utf8") as file:
-            npc = yaml.safe_load(file)
-
-        quest = None
-        with open('quest.yaml', 'r', encoding="utf8") as file:
-            quest = yaml.safe_load(file)
-
-        ad = None
-        with open('ad.yaml', 'r', encoding="utf8") as file:
-            ad = yaml.safe_load(file)
-
-        users = None
-        with open('users.yaml', 'r', encoding="utf8") as file:
-            users = yaml.safe_load(file)
-
-        candy = None
-        with open('candy.yaml', 'r', encoding="utf8") as file:
-            candy = yaml.safe_load(file)
-
-        @client.event
-        async def on_ready():
-            print(f'{client.user} has connected to Discord!')
-
+def stuff(client, data, quest, npc, candy, ad, users, ):
 #-------- лутилка
-
         @commands.command(name='лут')
         async def random_trophy(ctx, n=1):
             if (n < 1) or (n > 5):
@@ -2142,8 +2107,7 @@ def main():
 #------- общие дефы
 
         def amount():
-            am = f'{random.randint(100, 10000)}'
-            return am.lower()
+            return f'{random.randint(100, 10000)}'.lower()
 
         def mfr():
             if random.choice(data['type']) == 'самопал':
@@ -2339,8 +2303,6 @@ def main():
             return ad_all
 
 
-
-
         client.add_command(random_trophy)
         client.add_command(random_weapon)
         client.add_command(random_main_armor)
@@ -2382,8 +2344,20 @@ def main():
 
         client.add_command(test)
 
-        client.run(TOKEN)
+async def main():
+    client = ArchLight( 
+        intents=discord.Intents.all(),
+        data_folder='./Data/',
+        activity= None,
+        config='config.json')
 
+    @client.event
+    async def on_ready():
+        print(f'{client.user} has connected to Discord!')
+
+    stuff(client, client.data, client.quest, client.npc, client.candy, client.ad, client.dis_users)
+
+    await client.start(client.config.token)
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())
