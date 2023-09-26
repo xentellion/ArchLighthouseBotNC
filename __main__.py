@@ -15,7 +15,7 @@ npc = None
 candy = None
 ad = None
 users = None
-
+client = None
 
 @commands.command(name='лут')
 async def random_trophy(ctx, n=1):
@@ -695,9 +695,7 @@ async def pm_send(ctx, user='0', *, args):
 
     await ctx.message.delete()
 
-    pattern = re.compile(
-        "[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]")
-
+    pattern = re.compile("\d{6}-\d{6}-\d{6}")
 
     if user in ("000000-000000-000000", "Маги", "Штиль", "590182-630012-995152"):
         channel = client.get_channel(1139663185696280656)
@@ -2351,6 +2349,7 @@ def stuff(client: commands.Bot):
         client.add_command(test)
 
 async def main():
+    global client
     client = ArchLight( 
         intents=discord.Intents.all(),
         data_folder='./Data/',
