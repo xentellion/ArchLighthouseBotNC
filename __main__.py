@@ -1,10 +1,10 @@
 import discord
 from discord.ext import commands
 import random
-import yaml
+import os
 import re
 import asyncio
-from src.client import ArchLight
+from client import ArchLight
 
 
 discord.utils.setup_logging()
@@ -2360,7 +2360,9 @@ async def main():
     async def on_ready():
         print(f'{client.user} has connected to Discord!')
 
-    stuff(client)
+    for f in os.listdir('./src'):
+        if f.endswith('.py'):
+            await client.load_extension(f'src.{f[:-3]}')
     # Это много говнокода
     global data 
     data = client.data
